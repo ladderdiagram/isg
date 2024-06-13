@@ -41,6 +41,10 @@ body {
   text-align: center;
 }
 
+.show-answer-container {
+  margin-top: 6px;
+}
+
 .choice {
   display: block;
   width: 100%;
@@ -89,10 +93,13 @@ body {
   background-color: #fff;
   border-radius: 8px;
   padding: 10px;
-  display: flex;
-  align-items: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: all 0.3s; /* Geçiş efekti ekledik */
+}
+
+.inner-container {
+  display: flex;
+  align-items: center;
 }
 
 #questionNumber {
@@ -124,6 +131,7 @@ body {
 #question {
   margin-bottom: 29.9px;
 }
+
 
 @media (max-width: 768px) {
   .question-container {
