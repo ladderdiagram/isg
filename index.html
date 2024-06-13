@@ -12,6 +12,11 @@
         <label for="questionNumber">Soru Numarası:</label>
         <input type="number" id="questionNumber" min="1" />
         <button onclick="goToQuestionByNumber()">Git</button>
+        <div class="show-answer-container">
+          <input type="checkbox" id="showAnswerCheckbox" onchange="toggleShowAnswer()">
+          <label for="showAnswerCheckbox">Doğru cevabı her zaman göster</label>
+        </div>
+        
       </div>
       <div id="question-container" class="question-container">
         <h2 id="question"></h2>
