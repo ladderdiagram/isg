@@ -53,6 +53,24 @@ function processFileContent(fileContent) {
   }
 }
 
+function toggleShowAnswer() {
+  const showAnswerCheckbox = document.getElementById("showAnswerCheckbox");
+  const choices = document.querySelectorAll(".choice");
+  const currentQuestion = questions[currentQuestionIndex];
+
+  if (showAnswerCheckbox.checked && currentQuestion) {
+    const correctAnswerIndex = currentQuestion.correctAnswer;
+    choices.forEach((choice, index) => {
+      choice.classList.remove("correct", "incorrect");
+    });
+    choices[correctAnswerIndex].classList.add("correct");
+  } else {
+    choices.forEach((choice, index) => {
+      choice.classList.remove("correct");
+    });
+  }
+}
+
 function displayQuestion() {
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -72,22 +90,17 @@ function displayQuestion() {
   } else {
     console.error("Hata: Sorular yüklenirken bir sorun oluştu.");
   }
+
+  toggleShowAnswer(); // Her soru yüklendiğinde doğru cevabı kontrol et
 }
 
-function checkAnswer(button) {
+
+
+function checkAnswer(choiceIndex) {
   const currentQuestion = questions[currentQuestionIndex];
 
   if (!currentQuestion || !Array.isArray(currentQuestion.choices)) {
     console.error("Hata: Soru bilgisi veya şıklar eksik.");
-    return;
-  }
-
-  const selectedAnswerIndex = currentQuestion.choices.findIndex(
-    (choice, index) => button.textContent.includes(choice)
-  );
-
-  if (selectedAnswerIndex === -1) {
-    console.error("Hata: Geçersiz şık indeksi.");
     return;
   }
 
@@ -106,10 +119,10 @@ function checkAnswer(button) {
 
   choices[correctAnswerIndex].classList.add("correct");
 
-  if (selectedAnswerIndex === correctAnswerIndex) {
-    choices[selectedAnswerIndex].classList.add("correct");
+  if (choiceIndex === correctAnswerIndex) {
+    choices[choiceIndex].classList.add("correct");
   } else {
-    choices[selectedAnswerIndex].classList.add("incorrect");
+    choices[choiceIndex].classList.add("incorrect");
   }
 }
 
@@ -123,6 +136,7 @@ function nextQuestion() {
   } else {
     alert("Quiz bitti!");
   }
+  toggleShowAnswer(); // Sonraki soruya geçtiğimizde doğru cevabı kontrol et
 }
 
 function previousQuestion() {
@@ -170,6 +184,51 @@ document.addEventListener("contextmenu", function (event) {
   // nextQuestion()
   nextQuestion();
 });
+
+document.addEventListener("keydown", function (event) {
+  const currentQuestion = questions[currentQuestionIndex];
+
+  if (currentQuestion && currentQuestion.choices) {
+    let choiceIndex = -1;
+
+    switch (event.key) {
+      case "q":
+        choiceIndex = 0;
+        break;
+      case "w":
+        choiceIndex = 1;
+        break;
+      case "e":
+        choiceIndex = 2;
+        break;
+      case "r":
+        choiceIndex = 3;
+        break;
+      default:
+        break;
+    }
+
+    if (choiceIndex !== -1) {
+      event.preventDefault(); // varsayılan davranışı engelle
+      checkAnswer(choiceIndex);
+    }
+  }
+
+  // Yön tuşları için kontrol ekle
+  if (event.key === "ArrowLeft") {
+    previousQuestion();
+  } else if (event.key === "ArrowRight") {
+    nextQuestion();
+  }
+});
+
+document.querySelectorAll(".choice").forEach((button, index) => {
+  button.addEventListener("click", function () {
+    checkAnswer(index);
+  });
+});
+
+
 
 // İlk soru
 loadQuestionsFromFile();
