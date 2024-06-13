@@ -149,6 +149,7 @@ function previousQuestion() {
   } else {
     currentQuestionIndex = 0;
   }
+  toggleShowAnswer();
 }
 
 function goToQuestionByNumber() {
